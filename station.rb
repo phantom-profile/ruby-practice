@@ -7,8 +7,11 @@ require_relative 'train'
 # Location for trains and also objects included in routs
 class Station
   include InstanceCounter
-  include Validator
+  include Validation
+
   attr_reader :name, :trains
+
+  validate :name, :presence
 
   def self.all
     @@all ||= []
@@ -16,8 +19,8 @@ class Station
 
   def initialize(name)
     @name = name
-    validate!
     @trains = []
+    validate!
     self.class.all << self
     register_instances
   end
@@ -52,8 +55,4 @@ class Station
   attr_writer :trains
 
   @@stations = []
-
-  def validate!
-    validate_name!(name)
-  end
 end
